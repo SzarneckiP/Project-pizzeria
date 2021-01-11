@@ -212,7 +212,7 @@
         amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.data.price,
         price: thisProduct.data.price * this.amountWidget.value,
-        parms: thisProduct.prepareCartProductParams(),
+        params: thisProduct.prepareCartProductParams(),
       };
 
       return productSummary;
@@ -223,14 +223,14 @@
 
       const formData = utils.serializeFormToObject(thisProduct.form);
 
-      let params = {};
+      const params = {};
 
       // for every category (param)...
       for(let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];  // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
 
         params [paramId] = {
-          name: param.label,
+          label: param.label,
           options: {}
         };
 
@@ -239,7 +239,7 @@
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
 
           if (optionSelected) {
-            params[paramId].options[optionId] = option;
+            params[paramId].options[optionId] = option.label;
           }
         }
       }
@@ -348,6 +348,9 @@
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
 
       thisCart.dom.productList.appendChild(generatedDOM);
+
+      thisCart.products.push(menuProduct);
+      console.log('thisCart.products:', thisCart.products);
     }
   }
 
