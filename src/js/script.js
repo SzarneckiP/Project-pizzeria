@@ -71,6 +71,11 @@
     cart: {
       defaultDeliveryFee: 20,
     },
+    db: {
+      url: '//localhost:3131',
+      product: 'product',
+      order: 'order',
+    },
   };
 
   const templates = {
@@ -335,6 +340,9 @@
       thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
+      thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
+      thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
+      thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
     }
 
     initActions() {
@@ -351,6 +359,11 @@
 
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event.detail.cartProduct); //argument odbiera i przekazuje jej wartość do thisCart.remove
+      });
+
+      thisCart.dom.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
 
@@ -401,6 +414,38 @@
       thisCart.products.splice(indexOfCart, 1); //usunięcie products z tablicy
       cartProduct.dom.wrapper.remove(); // usuwanie całego wrappera produktu dodanego wcześniej?
       thisCart.update(); //wywołanie metody update, zeby zaaktualizować nową cene po usunięciu produktu
+    }
+
+    sendOrder() {
+      const thisCart = this;
+      const url = settings.db.url + '/' + settings.db.order;
+
+      const payload = {
+        address: thisCart.dom.address,
+        phone: thisCart.dom.phone,
+        totalPrice: thisCart.totalPrice,
+        subtotalPrice: thisCart.subtotalPrice,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: thisCart.deliveryFee,
+        products: [],
+      };
+      for(let prod of thisCart.products) {
+        payload.products.push(prod.getData());
+      }
+      const options = {
+        method: 'POST', //wysyłanie na server domyślnie jest GET - pobieranie
+        headers: {
+          'Content-Type': 'application/json', // info dla servera, że ma spodziewać się plików JSON
+        },
+        body: JSON.stringify(payload), // skonwertowanie obiektu payload na JSON
+      };
+
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+        }).then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+        });
     }
   }
 
@@ -468,6 +513,21 @@
         thisCartProduct.remove();
       });
     }
+
+    getData () {
+      const thisCartProduct = this;
+
+      const payloadSummary = {
+        id: thisCartProduct.id,
+        name: thisCartProduct.name,
+        amount: thisCartProduct.amount,
+        priceSingle: thisCartProduct.priceSingle,
+        price: thisCartProduct.price,
+        params: thisCartProduct.params,
+      };
+
+      return payloadSummary;
+    }
   }
 
   const app = {
@@ -475,14 +535,31 @@
       const thisApp = this;
 
       for(let productData in thisApp.data.products){
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     },
 
     initData: function(){
       const thisApp = this;
 
-      thisApp.data = dataSource;
+      thisApp.data = {};
+
+      const url = settings.db.url + '/' + settings.db.product;
+
+      fetch(url)
+        .then(function(rawResponse){
+          return rawResponse.json();
+        })
+        .then(function(parsedResponse){
+          //console.log('parsedResponse', parsedResponse);
+          thisApp.data.products = parsedResponse;
+
+          thisApp.initMenu();
+        });
+
+      //console.log('thisAdd.data:', JSON.stringify(thisApp.data));
+
+
     },
 
     initCart: function(){
@@ -501,7 +578,6 @@
       console.log('templates:', templates);
 
       thisApp.initData();
-      thisApp.initMenu();
       thisApp.initCart();
     },
   };
