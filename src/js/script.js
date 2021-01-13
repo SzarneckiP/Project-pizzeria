@@ -166,6 +166,7 @@
       const thisProduct = this;
 
       const formData = utils.serializeFormToObject(thisProduct.form);
+
       let price = thisProduct.data.price;
 
       // for every category (param)...
@@ -200,6 +201,7 @@
       price *= thisProduct.amountWidget.value; //multiply price by amount
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
+      thisProduct.finalPrice = price;
     }
 
     addToCart() {
@@ -215,7 +217,7 @@
         id: thisProduct.id,
         name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
-        priceSingle: thisProduct.data.price,
+        priceSingle: thisProduct.finalPrice,
         price: thisProduct.data.price * this.amountWidget.value,
         params: thisProduct.prepareCartProductParams(),
       };
@@ -343,6 +345,9 @@
       thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
       thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
       thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
+      console.log('thisCart.dom.form:', thisCart.dom.form);
+      console.log('thisCart.dom.phone:', thisCart.dom.phone);
+      console.log('thisCart.dom.address:', thisCart.dom.address);
     }
 
     initActions() {
@@ -418,11 +423,11 @@
 
     sendOrder() {
       const thisCart = this;
-      const url = settings.db.url + '/' + settings.db.order;
+      const url = settings.db.url + '/' + settings.db.order; // delaracja zródła?
 
       const payload = {
-        address: thisCart.dom.address,
-        phone: thisCart.dom.phone,
+        address: thisCart.dom.address.value,
+        phone: thisCart.dom.phone.value,
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
         totalNumber: thisCart.totalNumber,
