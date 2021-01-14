@@ -198,7 +198,7 @@
           }
         }
       }
-      price *= thisProduct.amountWidget.value; //multiply price by amount
+      price *= thisProduct.amountWidget.value; //multiply price by amount x = x * y
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
       thisProduct.finalPrice = price;
@@ -218,7 +218,7 @@
         name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.finalPrice,
-        price: thisProduct.data.price * this.amountWidget.value,
+        price: thisProduct.finalPrice * this.amountWidget.value,
         params: thisProduct.prepareCartProductParams(),
       };
 
