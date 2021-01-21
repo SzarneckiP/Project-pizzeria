@@ -131,7 +131,7 @@ class Product {
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
       detail: {
-        product: thisProduct,
+        product: thisProduct.prepareCartProduct(),
       },
     });
 
@@ -146,7 +146,7 @@ class Product {
       name: thisProduct.data.name,
       amount: thisProduct.amountWidget.value,
       priceSingle: thisProduct.finalPrice,
-      price: thisProduct.finalPrice * this.amountWidget.value,
+      price: thisProduct.finalPrice /** this.amountWidget.value*/,
       params: thisProduct.prepareCartProductParams(),
     };
 

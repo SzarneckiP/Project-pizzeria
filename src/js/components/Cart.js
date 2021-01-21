@@ -11,7 +11,7 @@ class Cart {
     thisCart.getElements(element);
     thisCart.initActions();
 
-    console.log('new Cart:', thisCart);
+    //console.log('new Cart:', thisCart);
   }
   getElements(element) {
     const thisCart = this;
@@ -28,9 +28,6 @@ class Cart {
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
     thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
     thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
-    console.log('thisCart.dom.form:', thisCart.dom.form);
-    console.log('thisCart.dom.phone:', thisCart.dom.phone);
-    console.log('thisCart.dom.address:', thisCart.dom.address);
   }
 
   initActions() {
@@ -76,8 +73,12 @@ class Cart {
     thisCart.subtotalPrice = 0;
 
     for(let product of thisCart.products){
+      console.log('product:', product);
+      console.log('thisCart.products:', thisCart.products);
       thisCart.totalNumber += product.amount;
+      console.log('totalNumber:', thisCart.totalNumber);
       thisCart.subtotalPrice += product.price;
+      console.log('subtotal:', thisCart.subtotalPrice);
     }
     if (thisCart.totalNumber !== 0) {
       thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
