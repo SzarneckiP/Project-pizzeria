@@ -52,7 +52,7 @@ class Cart {
     });
   }
 
-  add (menuProduct) {
+  add(menuProduct) {
     const thisCart = this;
 
     const generatedHTML = templates.cartProduct(menuProduct);
@@ -73,12 +73,8 @@ class Cart {
     thisCart.subtotalPrice = 0;
 
     for(let product of thisCart.products){
-      console.log('product:', product);
-      console.log('thisCart.products:', thisCart.products);
       thisCart.totalNumber += product.amount;
-      console.log('totalNumber:', thisCart.totalNumber);
       thisCart.subtotalPrice += product.price;
-      console.log('subtotal:', thisCart.subtotalPrice);
     }
     if (thisCart.totalNumber !== 0) {
       thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
