@@ -263,7 +263,7 @@ class Booking {
     const payload = {
       date: thisBooking.datePicker.value,
       hour: thisBooking.hourPicker.value, //godzina wybrana w hourPickerze (w formacie HH:ss)
-      table: thisBooking.tableId, //numer wybranego stolika (lub null jeśli nic nie wybrano)
+      table: parseInt(thisBooking.selectTable), //numer wybranego stolika (lub null jeśli nic nie wybrano)
       duration: thisBooking.hoursAmount.value,
       ppl: thisBooking.peopleAmount.value,
       starters: [],
@@ -283,7 +283,7 @@ class Booking {
     };
 
     fetch(url, options)
-      .then(thisBooking.booked)
+      .then(thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table))
       .then(console.log(thisBooking.booked))
       .then(function(response){
         return response.json();
