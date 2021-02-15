@@ -201,7 +201,7 @@ class Booking {
 
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
-      thisBooking.removeClassTable();
+      thisBooking.removeSelectedTable();
     });
 
     thisBooking.dom.btn.addEventListener('click', function(e){
@@ -233,19 +233,19 @@ class Booking {
       } else
       if(!clickedElement.classList.contains(classNames.booking.tableBooked) && !clickedElement.classList.contains(classNames.booking.tableSelected))
       {
-        thisBooking.removeClassTable();
+        thisBooking.removeSelectedTable();
         clickedElement.classList.add(classNames.booking.tableSelected);
-        thisBooking.selectTable.push(tableNum);
+        thisBooking.selectTable = tableNum;
       } else
       if (!clickedElement.classList.contains(classNames.booking.tableBooked && clickedElement.classList.contains(classNames.booking.tableSelected)))
       {
         clickedElement.classList.remove(classNames.booking.tableSelected);
-        thisBooking.selectTable.splice(thisBooking.selectTable.indexOf(tableNum), 1);
+        thisBooking.selectTable = null;
       }
     }
   }
 
-  removeClassTable(){
+  removeSelectedTable(){
     const thisBooking = this;
 
     for(let table of thisBooking.dom.tables){
@@ -253,7 +253,7 @@ class Booking {
         table.classList.remove(classNames.booking.tableSelected);
       }
     }
-    thisBooking.selectTable = [];
+    thisBooking.selectTable = null;
   }
 
   sendBooking(){
@@ -270,10 +270,11 @@ class Booking {
       phone: thisBooking.dom.phone.value,
       address: thisBooking.dom.address.value,
     };
-    console.log(payload);
+
     for(let personalData of thisBooking.starters){
       payload.starters.push(personalData);
     }
+
     const options = {
       method: 'POST', //wysyłanie na server domyślnie jest GET - pobieranie
       headers: {
@@ -283,13 +284,14 @@ class Booking {
     };
 
     fetch(url, options)
-      .then(thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table))
-      .then(console.log(thisBooking.booked))
       .then(function(response){
         return response.json();
-      }).then(function(parsedResponse){
+      })
+      .then(function(parsedResponse){
         console.log('parsedResponse', parsedResponse);
-
+        thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour, parsedResponse.duration, parsedResponse.table);
+        thisBooking.updateDOM();
+        thisBooking.removeSelectedTable();
       });
   }
 }
