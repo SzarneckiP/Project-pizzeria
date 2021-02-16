@@ -73,6 +73,10 @@ export const select = {
   nav: {
     links: '.main-nav a',
   },
+  home: {
+    orderBtn: '.order',
+    bookingBtn: '.book-table',
+  }
 };
 
 export const classNames = {

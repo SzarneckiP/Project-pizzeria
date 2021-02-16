@@ -112,7 +112,7 @@ const app = {
     const thisApp = this;
 
     const homeElem = document.querySelector(select.containerOf.home);
-    console.log(homeElem);
+
     thisApp.home = new Home(homeElem);
   },
 
@@ -123,13 +123,13 @@ const app = {
     //console.log('classNames:', classNames);
     //console.log('settings:', settings);
     //console.log('templates:', templates);
-    thisApp.initHome();
+
     thisApp.initPages();
 
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
-
+    thisApp.initHome();
   },
 };
 
