@@ -4,7 +4,7 @@ class Carousel {
   constructor(elem){
     const thisCarousel = this;
     thisCarousel.render(elem);
-    thisCarousel.initCarousel();
+    thisCarousel.initPlugin();
   }
 
   render(elem){
@@ -12,7 +12,7 @@ class Carousel {
     thisCarousel.wrapper = elem;
   }
 
-  initCarousel(){
+  initPlugin(){
     const thisCarousel = this;
 
     new Flickity(thisCarousel.wrapper, {
