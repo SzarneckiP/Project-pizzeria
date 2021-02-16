@@ -102,6 +102,7 @@ export const classNames = {
   },
 };
 
+
 export const settings = {
   hours: {
     open: 12,
