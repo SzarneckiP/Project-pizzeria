@@ -76,6 +76,7 @@ export const select = {
   home: {
     orderBtn: '.order',
     bookingBtn: '.book-table',
+    pageOptionsBtn: '.btn-home',
   }
 };
 

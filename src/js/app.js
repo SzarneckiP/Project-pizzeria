@@ -36,10 +36,11 @@ const app = {
         thisApp.activatePage(id);
 
         /* change URL hash */
-        //window.location.hash = '#/' + id;
+        window.location.hash = '#/' + id;
       });
     }
   },
+
 
   activatePage: function(pageId){
     const thisApp = this;
@@ -134,4 +135,6 @@ const app = {
 };
 
 app.init();
+
+export default app;
 

@@ -1,5 +1,6 @@
-import { templates, select, classNames } from './../settings.js';
+import { templates, select } from './../settings.js';
 import Carousel from './Carousel.js';
+import app from './../app.js';
 
 class Home {
   constructor(element) {
@@ -24,6 +25,8 @@ class Home {
 
     thisHome.pages = document.querySelector(select.containerOf.pages).children;
     thisHome.navLinks = document.querySelectorAll(select.nav.links);
+    thisHome.pageOptionsBtn = document.querySelectorAll(select.home.pageOptionsBtn);
+
   }
 
   initWidgets() {
@@ -35,22 +38,23 @@ class Home {
   activePages() {
     const thisHome = this;
 
-    thisHome.dom.orderBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      thisHome.pages[0].classList.remove(classNames.pages.active);
-      thisHome.pages[1].classList.add(classNames.pages.active);
-      thisHome.navLinks[0].classList.remove(classNames.nav.active);
-      thisHome.navLinks[1].classList.add(classNames.nav.active);
-    });
+    for(let pageOptionBtn of thisHome.pageOptionsBtn){
+      pageOptionBtn.addEventListener('click', function(event){
+        event.preventDefault();
+        const clickedElement = this;
 
-    thisHome.dom.bookingBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      thisHome.pages[0].classList.remove(classNames.pages.active);
-      thisHome.pages[2].classList.add(classNames.pages.active);
-      thisHome.navLinks[0].classList.remove(classNames.nav.active);
-      thisHome.navLinks[2].classList.add(classNames.nav.active);
-    });
+        /* get page id from href attribute */
+        const id = clickedElement.getAttribute('href').replace('#', ''); //replace to: zamiana # na pusty ciąg znaków
+
+        /* run thisApp.activatePage with that id */
+        app.activatePage(id);
+
+        /* change URL hash */
+        window.location.hash = '#/' + id;
+      });
+    }
   }
+
 }
 
 export default Home;
